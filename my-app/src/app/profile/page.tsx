@@ -1,20 +1,13 @@
-export const dynamic = "force-dynamic";
-
 import { getUserProfile } from "@/lib/profile";
 import SNSProfile from "@/app/ui/Profile/SNSProfile";
-import { notFound } from "next/navigation";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ profileId: string }>; // Promise 타입으로 변경
-}) {
-  const { profileId } = await params; // params를 await
-  const pid = parseInt(profileId, 10);
+export default async function MyProfilePage() {
   const MOCK_USER_ID = 1;
+  const profile = await getUserProfile(MOCK_USER_ID, MOCK_USER_ID);
 
-  const profile = await getUserProfile(pid, MOCK_USER_ID);
-  if (!profile) return notFound();
+  if (!profile) {
+    return <div>내 프로필 정보를 불러올 수 없습니다.</div>;
+  }
 
-  return <SNSProfile profile={profile} pid={pid} />; // ✅ props로 전달
+  return <SNSProfile profile={profile} pid={MOCK_USER_ID} />;
 }
